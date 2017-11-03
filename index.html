@@ -270,6 +270,186 @@
   
   
   <div class="post-block">
+    <link itemprop="mainEntityOfPage" href="http://caixiaojia.github.io/2017/11/03/优化网页性能/">
+
+    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
+      <meta itemprop="name" content="caixiaojia">
+      <meta itemprop="description" content="">
+      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/9779955?v=4&s=460">
+    </span>
+
+    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
+      <meta itemprop="name" content="蔡的小房间">
+    </span>
+
+    
+      <header class="post-header">
+
+        
+        
+          <h1 class="post-title" itemprop="name headline">
+                
+                <a class="post-title-link" href="/2017/11/03/优化网页性能/" itemprop="url">优化网页性能</a></h1>
+        
+
+        <div class="post-meta">
+          <span class="post-time">
+            
+              <span class="post-meta-item-icon">
+                <i class="fa fa-calendar-o"></i>
+              </span>
+              
+                <span class="post-meta-item-text">发表于</span>
+              
+              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-11-03T18:44:15+08:00">
+                2017-11-03
+              </time>
+            
+
+            
+
+            
+          </span>
+
+          
+
+          
+            
+          
+
+          
+          
+
+          
+
+          
+
+          
+
+        </div>
+      </header>
+    
+
+    
+    
+    
+    <div class="post-body" itemprop="articleBody">
+
+      
+      
+
+      
+        
+          
+            <script src="/assets/js/APlayer.min.js"> </script><h1 id="优化网页性能-—-加载性能"><a href="#优化网页性能-—-加载性能" class="headerlink" title="优化网页性能 — 加载性能"></a>优化网页性能 — 加载性能</h1><blockquote>
+<p>本篇文章主要讲解优化网络性能，包括两个大部分：<strong>1. 加载性能</strong> <strong>2. 渲染性能</strong></p>
+</blockquote>
+<h3 id="加载性能"><a href="#加载性能" class="headerlink" title="加载性能"></a>加载性能</h3><blockquote>
+<p>不同网络条件下如何更友好的加载页面，从以下几方面考虑问题</p>
+</blockquote>
+<h6 id="A-优化内容效率"><a href="#A-优化内容效率" class="headerlink" title="A. 优化内容效率"></a>A. 优化内容效率</h6><pre><code>1. 避免不必要的下载
+    a.清点您的网页上的自有资产和第三方资产。
+    b.评估每个资产的表现：其价值及其技术性能。
+    c.确定这些资源是否提供了足够的价值。
+
+2. 优化基于文本的资产的编码和传送大小
+    a.源码压缩：预处理和环境特定优化
+    b.通过 GZIP 压缩文本
+
+3. 图像优化
+    a. 选择最合适的图片和图片大小
+
+4. 网页字体优化
+    a. 通过 @font-face 定义字体系列
+    b. 优化加载和渲染,否则导致渲染三秒问题
+
+5. HTTP 缓存
+    a. 通过 ETag 验证缓存的响应
+    b. Cache-Control
+
+6. 模拟网络工具
+    1. 浏览器：Chrome DevTools
+    2. MAC系统工具: Network Link Conditioner
+    3. 手机设备模拟：Android Emulator
+    4. 使用不同位置和网络测试: WebPagetest
+    5. 模拟调制解调器的速度: Fiddler
+    6. HTTP/HTTPS 代理: Charles
+</code></pre><h6 id="B-不加载两次相同的内容"><a href="#B-不加载两次相同的内容" class="headerlink" title="B. 不加载两次相同的内容"></a>B. 不加载两次相同的内容</h6><pre><code>1. web储存
+2. 离线的UX交互
+</code></pre><h6 id="C-注意加载顺序"><a href="#C-注意加载顺序" class="headerlink" title="C. 注意加载顺序"></a>C. 注意加载顺序</h6><pre><code>1. 关键渲染路径优化
+</code></pre><h6 id="D-PRPL模式"><a href="#D-PRPL模式" class="headerlink" title="D. PRPL模式"></a>D. PRPL模式</h6><pre><code>PRPL 是一种用于结构化和提供 Progressive Web App (PWA) 的模式，该模式强调应用交付和启动的性能。
+特性：
+    1. 推送 - 为初始网址路由推送关键资源。
+    2. 渲染 - 渲染初始路由。
+    3. 预缓存 - 预缓存剩余路由。
+    4. 延迟加载 - 延迟加载并按需创建剩余路由
+应用结构：
+    1.应用的主_进入点_从每个有效的路由提供。 此文件应非常小，它从不同网址提供，因此会被缓存多次。 进入点的所有资源网址都需要是绝对网址，因为它可以从非顶级网址提供。
+    2.Shell 或 App Shell，包含顶级应用逻辑、路由器，等等。
+    3.延迟加载的应用_片段_。片段可以表示特定视图的代码，或可延迟加载的其他代码（例如，首次绘制不需要的部分主应用，如用户与应用交互前未显示的菜单）。Shell 负责在需要时动态导入片段
+应用执行：
+    1.应用进入点
+        进入点必须导入和实例化 Shell，并且有条件地加载任何所需的 polyfill。
+        进入点的主要注意事项为：
+          a.具有最少的静态依赖项，换言之，除了 App Shell 本身外并没有多少依赖项。
+          b.有条件地加载所需的 polyfill。
+          c.为所有依赖项使用绝对路径。
+    2.App Shell
+        Shell 负责路由，通常包含应用的主导航 UI。
+        应用会根据需要延迟加载片段。例如，当用户更换到新路由时，应用会导入与该路由相关的片段。这可能会向服务器发出新请求，或者只是从缓存加载资源。
+        Shell（包括其静态依赖项）应包含第一次绘制所需的全部资源。
+    3.使用服务器推送
+        a.设计用于服务器/浏览器组合的未捆绑构建，此类组合支持 HTTP/2，以便在优化缓存时传输第一次快速绘制所需的资源。可以使用 &lt;link rel=&quot;preload&quot;&gt;或 HTTP/2 Push 高效地触发这些资源的传输。
+        b.对于不处理 HTTP/2 的浏览器，构建过程会生成一组不同的捆绑包：一个用于 Shell 的捆绑包，以及一个用于每个片段的捆绑包。
+</code></pre><pre><code>    18:44:15, 星期三, 2017年11月3日, 于北京，回龙观
+</code></pre>
+          
+        
+      
+    </div>
+    
+    
+    
+
+    
+
+    
+
+    
+
+    <footer class="post-footer">
+      
+
+      
+
+      
+
+      
+      
+        <div class="post-eof"></div>
+      
+    </footer>
+  </div>
+  
+  
+  
+  </article>
+
+
+    
+      
+
+  
+
+  
+  
+  
+
+  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
+  
+  
+  
+  <div class="post-block">
     <link itemprop="mainEntityOfPage" href="http://caixiaojia.github.io/2017/10/04/写给未来的自己/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -375,186 +555,6 @@
 <p>现在的打算是在10.1之后面一下老东家，再面一些中小公司，争取把工作定了，挣点钱，不能那么飘，让别人觉得不可靠，这样对个人 的认可度和本身的信心也是一种打击，一定要把自己从这单纯的几个月抽出来，放到人生的长河中去看待问题，我相信未来可期，我也相信 做难事必有所得。</p>
 </blockquote>
 <pre><code>    05:46:49, 星期三, 2017年10月4日, 于北京，回龙观
-</code></pre>
-          
-        
-      
-    </div>
-    
-    
-    
-
-    
-
-    
-
-    
-
-    <footer class="post-footer">
-      
-
-      
-
-      
-
-      
-      
-        <div class="post-eof"></div>
-      
-    </footer>
-  </div>
-  
-  
-  
-  </article>
-
-
-    
-      
-
-  
-
-  
-  
-  
-
-  <article class="post post-type-normal" itemscope itemtype="http://schema.org/Article">
-  
-  
-  
-  <div class="post-block">
-    <link itemprop="mainEntityOfPage" href="http://caixiaojia.github.io/2017/10/04/优化网页性能/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="name" content="caixiaojia">
-      <meta itemprop="description" content="">
-      <meta itemprop="image" content="https://avatars3.githubusercontent.com/u/9779955?v=4&s=460">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="蔡的小房间">
-    </span>
-
-    
-      <header class="post-header">
-
-        
-        
-          <h1 class="post-title" itemprop="name headline">
-                
-                <a class="post-title-link" href="/2017/10/04/优化网页性能/" itemprop="url">优化网页性能</a></h1>
-        
-
-        <div class="post-meta">
-          <span class="post-time">
-            
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              
-                <span class="post-meta-item-text">发表于</span>
-              
-              <time title="创建于" itemprop="dateCreated datePublished" datetime="2017-10-04T04:44:15+08:00">
-                2017-10-04
-              </time>
-            
-
-            
-
-            
-          </span>
-
-          
-
-          
-            
-          
-
-          
-          
-
-          
-
-          
-
-          
-
-        </div>
-      </header>
-    
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-      
-
-      
-        
-          
-            <script src="/assets/js/APlayer.min.js"> </script><h1 id="优化网页性能-—-加载性能"><a href="#优化网页性能-—-加载性能" class="headerlink" title="优化网页性能 — 加载性能"></a>优化网页性能 — 加载性能</h1><blockquote>
-<p>本篇文章主要讲解优化网络性能，包括两个大部分：<strong>1. 加载性能</strong> <strong>2. 渲染性能</strong></p>
-</blockquote>
-<h3 id="加载性能"><a href="#加载性能" class="headerlink" title="加载性能"></a>加载性能</h3><blockquote>
-<p>不同网络条件下如何更友好的加载页面，从以下几方面考虑问题</p>
-</blockquote>
-<h6 id="A-优化内容效率"><a href="#A-优化内容效率" class="headerlink" title="A. 优化内容效率"></a>A. 优化内容效率</h6><pre><code>1. 避免不必要的下载
-    a.清点您的网页上的自有资产和第三方资产。
-    b.评估每个资产的表现：其价值及其技术性能。
-    c.确定这些资源是否提供了足够的价值。
-
-2. 优化基于文本的资产的编码和传送大小
-    a.源码压缩：预处理和环境特定优化
-    b.通过 GZIP 压缩文本
-
-3. 图像优化
-    a. 选择最合适的图片和图片大小
-
-4. 网页字体优化
-    a. 通过 @font-face 定义字体系列
-    b. 优化加载和渲染,否则导致渲染三秒问题
-
-5. HTTP 缓存
-    a. 通过 ETag 验证缓存的响应
-    b. Cache-Control
-
-6. 模拟网络工具
-    1. 浏览器：Chrome DevTools
-    2. MAC系统工具: Network Link Conditioner
-    3. 手机设备模拟：Android Emulator
-    4. 使用不同位置和网络测试: WebPagetest
-    5. 模拟调制解调器的速度: Fiddler
-    6. HTTP/HTTPS 代理: Charles
-</code></pre><h6 id="B-不加载两次相同的内容"><a href="#B-不加载两次相同的内容" class="headerlink" title="B. 不加载两次相同的内容"></a>B. 不加载两次相同的内容</h6><pre><code>1. web储存
-2. 离线的UX交互
-</code></pre><h6 id="C-注意加载顺序"><a href="#C-注意加载顺序" class="headerlink" title="C. 注意加载顺序"></a>C. 注意加载顺序</h6><pre><code>1. 关键渲染路径优化
-</code></pre><h6 id="D-PRPL模式"><a href="#D-PRPL模式" class="headerlink" title="D. PRPL模式"></a>D. PRPL模式</h6><pre><code>PRPL 是一种用于结构化和提供 Progressive Web App (PWA) 的模式，该模式强调应用交付和启动的性能。
-特性：
-    1. 推送 - 为初始网址路由推送关键资源。
-    2. 渲染 - 渲染初始路由。
-    3. 预缓存 - 预缓存剩余路由。
-    4. 延迟加载 - 延迟加载并按需创建剩余路由
-应用结构：
-    1.应用的主_进入点_从每个有效的路由提供。 此文件应非常小，它从不同网址提供，因此会被缓存多次。 进入点的所有资源网址都需要是绝对网址，因为它可以从非顶级网址提供。
-    2.Shell 或 App Shell，包含顶级应用逻辑、路由器，等等。
-    3.延迟加载的应用_片段_。片段可以表示特定视图的代码，或可延迟加载的其他代码（例如，首次绘制不需要的部分主应用，如用户与应用交互前未显示的菜单）。Shell 负责在需要时动态导入片段
-应用执行：
-    1.应用进入点
-        进入点必须导入和实例化 Shell，并且有条件地加载任何所需的 polyfill。
-        进入点的主要注意事项为：
-          a.具有最少的静态依赖项，换言之，除了 App Shell 本身外并没有多少依赖项。
-          b.有条件地加载所需的 polyfill。
-          c.为所有依赖项使用绝对路径。
-    2.App Shell
-        Shell 负责路由，通常包含应用的主导航 UI。
-        应用会根据需要延迟加载片段。例如，当用户更换到新路由时，应用会导入与该路由相关的片段。这可能会向服务器发出新请求，或者只是从缓存加载资源。
-        Shell（包括其静态依赖项）应包含第一次绘制所需的全部资源。
-    3.使用服务器推送
-        a.设计用于服务器/浏览器组合的未捆绑构建，此类组合支持 HTTP/2，以便在优化缓存时传输第一次快速绘制所需的资源。可以使用 &lt;link rel=&quot;preload&quot;&gt;或 HTTP/2 Push 高效地触发这些资源的传输。
-        b.对于不处理 HTTP/2 的浏览器，构建过程会生成一组不同的捆绑包：一个用于 Shell 的捆绑包，以及一个用于每个片段的捆绑包。
-</code></pre><pre><code>    05:46:49, 星期三, 2017年10月4日, 于北京，回龙观
 </code></pre>
           
         
